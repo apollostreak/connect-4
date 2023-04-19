@@ -13,7 +13,7 @@ const Header = ({gameState,currentPlayer,winPlayer}) => {
             default:
         }
     }
-  return (
+    return (
     <div className='panel header'>
         <div className='header-text'> {renderLabel()} </div>
     </div>
