@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import GameCircle from "./GameCircle";
 import Footer from "./Footer";
 import '../Game.css';
-import { isDraw, isWinner } from "../Helper";
+import { isDraw, isWinner, getComputerMove } from "../Helper";
 
 import { GAME_STATE_PLAY, GAME_STATE_WIN, NOPLAYER, PLAYER_1, PLAYER_2, NO_CIRCLES, GAME_STATE_DRAW } from "../Constants"
 
 const GameBoard = () => {
-    const [gameBoard, setGameBoard] = useState(Array(16).fill(NOPLAYER));
+    const [gameBoard, setGameBoard] = useState(Array(NO_CIRCLES).fill(NOPLAYER));
     //gameBoard will give the current state and setGameBoard <callback function> will be used to update the state
     const [currentPlayer, setCurrentPlayer] = useState(PLAYER_1);
     const [gameState, setGameState] = useState(GAME_STATE_PLAY);
     const [winPlayer, setWinPlayer] = useState(NOPLAYER);
 
     console.log(gameBoard);
+
+    const initGame = () => {
+        console.log('initGame');
+        setGameBoard(Array(NO_CIRCLES).fill(NOPLAYER));
+        setCurrentPlayer(PLAYER_1);
+        setGameState(GAME_STATE_PLAY);
+    }
+    useEffect(() => {
+        initGame();
+    },[]);
 
     const initBoard = () => {
         const circles = [];
@@ -24,6 +34,10 @@ const GameBoard = () => {
         return circles;
     }
 
+    const suggestMove = () => {
+        circleClicked(getComputerMove(gameBoard));
+    }
+     
     const circleClicked = (id) => {
         // here the circleClicked is passed as the callback function to child component (<GameCircle>) from the parent component (<GameBoard>)
 
@@ -62,9 +76,9 @@ const GameBoard = () => {
         return (
         <GameCircle 
             key = {id}
-            id={id} 
-            className={`player_${gameBoard[id]}`} 
-            onCircleClicked={circleClicked} //circleClicked is the function prop/callback function passed to the GameCircle
+            id = {id} 
+            className = {`player_${gameBoard[id]}`} 
+            onCircleClicked = {circleClicked} //circleClicked is the function prop/callback function passed to the GameCircle
         />
         );
     }
@@ -72,8 +86,8 @@ const GameBoard = () => {
     return (
         <>
             <Header gameState = {gameState} currentPlayer = {currentPlayer} winPlayer = {winPlayer}/>
-                <div className="gameBoard">{initBoard()}</div>
-            <Footer />
+            <div className = "gameBoard">{initBoard()}</div>
+            <Footer onNewGameClick = {initGame} onSuggestClick = {suggestMove} gameState = {gameState} />
         </>
     );
 }
