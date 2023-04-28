@@ -22,7 +22,7 @@ const GameBoard = () => {
         setCurrentPlayer(PLAYER_1);
         setGameState(GAME_STATE_PLAY);
     }
-    useEffect(() => {
+    useEffect(() => { // will be fired when the component first loads
         initGame();
     },[]);
 
